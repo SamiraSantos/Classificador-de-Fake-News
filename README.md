@@ -141,43 +141,23 @@ Isso significa que o modelo é mais conservador: ele prefere retornar `Inconclus
 
 ## Como executar
 
-Instale as dependências:
+### Uso rápido para testar
+
+Para apenas testar o projeto em outro computador, não é necessário coletar os dados novamente.
 
 ```bash
 py -m pip install -r requirements.txt
-```
-
-Coletar ou reconstruir os dados com `factcheckexplorer`:
-
-```bash
-py collect_data.py
-```
-
-Adicionar exemplos verdadeiros de fontes confiáveis:
-
-```bash
-py collect_official_true_data.py
-```
-
-Adicionar exemplos curados rastreáveis:
-
-```bash
-py add_curated_examples.py
-```
-
-Balancear o dataset para 50.000 linhas:
-
-```bash
-py balance_dataset.py
-```
-
-Treinar o modelo:
-
-```bash
 py train.py
+py app.py
 ```
 
-Classificar uma afirmação pelo terminal:
+Depois, acesse no navegador:
+
+```text
+http://localhost:8000
+```
+
+Se quiser testar pelo terminal:
 
 ```bash
 py classify.py "Urna foi fraudada sem prova"
@@ -187,13 +167,33 @@ Exemplos:
 
 ```bash
 py classify.py "lula é o presidente do brasil"
-py classify.py "bolsonaro está preso"
-py classify.py "bolsonaro levou uma facada"
+py classify.py "lula está preso"
+py classify.py "lula foi preso"
 ```
+
+### Reconstruir o dataset completo
+
+Use estes comandos somente se quiser coletar os dados de novo ou recriar a base do zero. Para apenas testar o sistema, pule esta parte.
+
+```bash
+py collect_data.py
+py collect_official_true_data.py
+py add_curated_examples.py
+py balance_dataset.py
+py train.py
+```
+
+O que cada comando faz:
+
+- `py collect_data.py`: coleta checagens com `factcheckexplorer`.
+- `py collect_official_true_data.py`: adiciona exemplos verdadeiros de fontes confiáveis.
+- `py add_curated_examples.py`: adiciona exemplos curados para casos curtos e comuns.
+- `py balance_dataset.py`: balanceia o dataset para 50.000 linhas.
+- `py train.py`: treina o modelo e salva em `models/logistic_regression_model.joblib`.
 
 ## Interface web
 
-Para abrir a interface local:
+Para abrir a interface local depois de instalar as dependências e treinar o modelo:
 
 ```bash
 py app.py
