@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Detector de Fake News</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="stage">
+      <div class="decor-layer" aria-hidden="true">
+        <div class="floaty news-sticker sticker-news">
+          <div class="sticker-bar">DIÁRIO HOJE</div>
+          <strong>FAKE NEWS<br>VIRALIZA NO<br>BRASIL</strong>
+          <span class="fake-mark">X</span>
+          <span class="line line-long"></span>
+          <span class="line"></span>
+          <span class="line line-short"></span>
+        </div>
+
+        <div class="floaty tag-sticker sticker-alert">? ALERTA!</div>
+        <div class="floaty mini-card sticker-boato">
+          <strong>ALERTA</strong>
+          <span>Boato viraliza<br>nas redes.</span>
+        </div>
+        <div class="floaty bubble-sticker sticker-true">VERDADE?</div>
+
+        <div class="floaty bubble-sticker sticker-fake">FAKE!</div>
+        <div class="floaty label-sticker sticker-breaking">BREAKING NEWS</div>
+        <div class="floaty bubble-sticker sticker-lie">MENTIRA!</div>
+        <div class="floaty label-sticker sticker-check">CHECAGEM</div>
+        <div class="floaty label-sticker sticker-fato">FATO?</div>
+        <div class="floaty tag-sticker sticker-urgente">URGENTE</div>
+        <div class="floaty bubble-sticker sticker-duvida">DÚVIDA?</div>
+        <div class="floaty label-sticker sticker-investigar">INVESTIGAR</div>
+        <div class="floaty note-sticker sticker-fontes">
+          <strong>FONTES</strong>
+          <span>checadas</span>
+        </div>
+        <div class="floaty stamp-sticker sticker-oficial">OFICIAL?</div>
+
+        <span class="floaty symbol symbol-star-one">★</span>
+        <span class="floaty symbol symbol-star-two">★</span>
+        <span class="floaty symbol symbol-star-three">★</span>
+        <span class="floaty symbol symbol-star-four">★</span>
+        <span class="floaty symbol symbol-bang">!</span>
+        <span class="floaty symbol symbol-question">?</span>
+        <span class="floaty symbol symbol-lens"></span>
+      </div>
+
+      <section class="phone-card" aria-label="Detector de Fake News">
+        <h1>Detector de<br>Fake News</h1>
+
+        <div class="dashboard" data-state="idle">
+          <div class="traffic-case" aria-hidden="true">
+            <span class="screw screw-top"></span>
+            <span class="bulb bulb-fake"></span>
+            <span class="bulb bulb-inconclusive"></span>
+            <span class="bulb bulb-true"></span>
+            <span class="screw screw-bottom"></span>
+          </div>
+
+          <section class="result-panel" aria-live="polite">
+            <div id="emptyState" class="empty-state">
+              <span class="empty-icon">?</span>
+              <strong>Digite algo e<br>clique em analisar</strong>
+            </div>
+
+            <div id="analysisState" class="analysis-state">
+              <div class="status-pill">
+                <span class="status-icon">-</span>
+                <span id="statusText">AGUARDANDO</span>
+              </div>
+
+              <p id="resultMessage">Digite uma afirmação para analisar.</p>
+
+              <div class="certainty-row">
+                <span>CERTEZA</span>
+                <strong id="confidenceText">--</strong>
+              </div>
+
+              <div class="meter" aria-hidden="true">
+                <span id="meterFill"></span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <form id="classifyForm" class="form-panel">
+          <label class="sr-only" for="claimInput">Digite a afirmação ou notícia</label>
+          <textarea
+            id="claimInput"
+            name="claim"
+            rows="4"
+            placeholder="Digite a afirmação ou notícia aqui..."
+            required
+          ></textarea>
+
+          <button id="analyzeButton" type="submit">
+            <span class="button-icon">&#128269;</span>
+            <span id="buttonText">ANALISAR</span>
+          </button>
+        </form>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
