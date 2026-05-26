@@ -1,0 +1,3 @@
+factcheckexplorer @ git+https://github.com/GONZOsint/factcheckexplorer.git
+joblib
+scikit-learn

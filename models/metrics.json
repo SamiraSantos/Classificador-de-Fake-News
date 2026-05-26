@@ -1,0 +1,81 @@
+{
+  "algorithm": "TF-IDF + Logistic Regression",
+  "dataset_size": 50000,
+  "unique_dataset_size": 5718,
+  "class_distribution": {
+    "Fake": 25000,
+    "True": 25000
+  },
+  "unique_class_distribution": {
+    "True": 994,
+    "Fake": 4724
+  },
+  "train_size": 4288,
+  "balanced_train_size": 7086,
+  "test_size": 1430,
+  "accuracy": 0.865034965034965,
+  "precision": {
+    "Fake": 0.9333333333333333,
+    "True": 0.596551724137931
+  },
+  "recall": {
+    "Fake": 0.9009314140558848,
+    "True": 0.6947791164658634
+  },
+  "f1_score": {
+    "Fake": 0.9168461869883671,
+    "True": 0.6419294990723562
+  },
+  "support": {
+    "Fake": 1181,
+    "True": 249
+  },
+  "labels": [
+    "Fake",
+    "True"
+  ],
+  "confusion_matrix": [
+    [
+      1064,
+      117
+    ],
+    [
+      76,
+      173
+    ]
+  ],
+  "classification_report": {
+    "Fake": {
+      "precision": 0.9333333333333333,
+      "recall": 0.9009314140558848,
+      "f1-score": 0.9168461869883671,
+      "support": 1181.0
+    },
+    "True": {
+      "precision": 0.596551724137931,
+      "recall": 0.6947791164658634,
+      "f1-score": 0.6419294990723562,
+      "support": 249.0
+    },
+    "accuracy": 0.865034965034965,
+    "macro avg": {
+      "precision": 0.7649425287356322,
+      "recall": 0.7978552652608741,
+      "f1-score": 0.7793878430303616,
+      "support": 1430.0
+    },
+    "weighted avg": {
+      "precision": 0.8746909412426653,
+      "recall": 0.865034965034965,
+      "f1-score": 0.8689760783932016,
+      "support": 1430.0
+    }
+  },
+  "confidence_filter": {
+    "minimum_confidence": 0.95,
+    "minimum_similarity": 0.35,
+    "accepted_predictions": 291,
+    "coverage": 0.2034965034965035,
+    "accuracy_on_accepted_predictions": 0.993127147766323
+  }
+}

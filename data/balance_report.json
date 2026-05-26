@@ -1,0 +1,15 @@
+{
+  "source": "data/dataset.csv",
+  "unique_output": "data/dataset_unique.csv",
+  "balanced_output": "data/dataset.csv",
+  "target_per_class": 25000,
+  "unique_distribution": {
+    "Fake": 4724,
+    "True": 994
+  },
+  "balanced_distribution": {
+    "True": 25000,
+    "Fake": 25000
+  },
+  "method": "Reamostragem com reposicao usando exemplos coletados e registrados no dataset local."
+}
