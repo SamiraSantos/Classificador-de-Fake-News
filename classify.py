@@ -1,4 +1,6 @@
 import argparse
+import re
+import unicodedata
 
 import joblib
 from sklearn.metrics.pairwise import cosine_similarity
@@ -11,16 +13,49 @@ DEFAULT_DATASET_PATH = "data/dataset.csv"
 DEFAULT_MIN_CONFIDENCE = 0.95
 DEFAULT_MIN_SIMILARITY = 0.35
 DEFAULT_STRONG_MATCH_SIMILARITY = 0.75
+AMBIGUOUS_INCONCLUSIVE_TERMS = (
+    ("lula", "inocent"),
+    ("lula", "absolv"),
+)
+
+
+def normalize_text(text):
+    normalized = unicodedata.normalize("NFKD", text.lower())
+    without_accents = "".join(char for char in normalized if not unicodedata.combining(char))
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", without_accents).split())
+
+
+def is_ambiguous_claim(text):
+    normalized = normalize_text(text)
+    return any(all(term in normalized for term in terms) for terms in AMBIGUOUS_INCONCLUSIVE_TERMS)
 
 
 def build_dataset_index(model, dataset_path):
     texts, labels = read_dataset(dataset_path)
     vectorizer = model.named_steps["tfidf"]
     dataset_matrix = vectorizer.transform(texts)
+    label_by_normalized_text = {}
+    text_by_normalized_text = {}
+    conflicts = set()
+
+    for text, label in zip(texts, labels):
+        key = normalize_text(text)
+        if key in label_by_normalized_text and label_by_normalized_text[key] != label:
+            conflicts.add(key)
+        else:
+            label_by_normalized_text[key] = label
+            text_by_normalized_text[key] = text
+
+    for key in conflicts:
+        label_by_normalized_text.pop(key, None)
+        text_by_normalized_text.pop(key, None)
+
     return {
         "texts": texts,
         "labels": labels,
         "matrix": dataset_matrix,
+        "label_by_normalized_text": label_by_normalized_text,
+        "text_by_normalized_text": text_by_normalized_text,
     }
 
 
@@ -47,6 +82,35 @@ def classify_text(
     min_similarity=DEFAULT_MIN_SIMILARITY,
     strong_match_similarity=DEFAULT_STRONG_MATCH_SIMILARITY,
 ):
+    if is_ambiguous_claim(text):
+        return {
+            "label": "Inconclusiva",
+            "confidence": 0.0,
+            "display_confidence": 0.0,
+            "similarity": 0.0,
+            "model_label": "Inconclusiva",
+            "nearest_label": "Inconclusiva",
+            "nearest_text": "",
+            "decision": "ambiguous_claim",
+        }
+
+    if dataset_index is None:
+        dataset_index = build_dataset_index(model, dataset_path)
+
+    normalized_text = normalize_text(text)
+    direct_label = dataset_index["label_by_normalized_text"].get(normalized_text)
+    if direct_label:
+        return {
+            "label": direct_label,
+            "confidence": 1.0,
+            "display_confidence": 1.0,
+            "similarity": 1.0,
+            "model_label": direct_label,
+            "nearest_label": direct_label,
+            "nearest_text": dataset_index["text_by_normalized_text"].get(normalized_text, text),
+            "decision": "direct_dataset_match",
+        }
+
     probabilities = dict(zip(model.classes_, model.predict_proba([text])[0]))
     model_label = max(probabilities, key=probabilities.get)
     confidence = float(probabilities[model_label])

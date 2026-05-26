@@ -4,12 +4,12 @@
   "balanced_output": "data/dataset.csv",
   "target_per_class": 25000,
   "unique_distribution": {
-    "Fake": 4724,
-    "True": 994
+    "True": 1020,
+    "Fake": 4740
   },
   "balanced_distribution": {
-    "True": 25000,
-    "Fake": 25000
+    "Fake": 25000,
+    "True": 25000
   },
   "method": "Reamostragem com reposicao usando exemplos coletados e registrados no dataset local."
 }

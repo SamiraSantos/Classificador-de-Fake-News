@@ -40,6 +40,7 @@ Importante: a classificação final não faz checagem online em tempo real. O mo
 - `data/raw/`: arquivos CSV brutos retornados pelo `factcheckexplorer`.
 - `data/factcheck_sources.csv`: textos coletados, rótulos convertidos, vereditos originais, fontes e URLs das checagens.
 - `data/official_true_sources.csv`: exemplos `True` vindos de fontes confiáveis.
+- `data/curated_examples_sources.csv`: exemplos curados para cobrir fatos políticos curtos, diferenças entre passado e presente e frases usadas nos testes da interface.
 - `data/dataset_unique.csv`: dataset sem duplicatas, antes da reamostragem.
 - `data/dataset.csv`: dataset final balanceado, usado no treinamento.
 - `data/balance_report.json`: resumo do balanceamento.
@@ -48,12 +49,12 @@ Importante: a classificação final não faz checagem online em tempo real. O mo
 
 ## Tamanho do dataset
 
-O dataset único possui `5.718` exemplos:
+O dataset único possui `5.760` exemplos:
 
 | Classe | Exemplos únicos |
 | --- | ---: |
-| `Fake` | 4.724 |
-| `True` | 994 |
+| `Fake` | 4.740 |
+| `True` | 1.020 |
 
 Como a base original tinha muito mais exemplos falsos do que verdadeiros, o dataset final foi balanceado por reamostragem com reposição.
 
@@ -65,6 +66,8 @@ O dataset final usado no treinamento possui `50.000` linhas:
 | `True` | 25.000 |
 
 As buscas incluíram temas eleitorais e políticos, como `eleição`, `urna`, `voto`, `Bolsonaro`, `Lula`, `TSE`, `STF`, `Alexandre de Moraes`, `Bolsonaro preso`, `prisão Bolsonaro`, `deputado`, `senador`, `Congresso Nacional`, `Pablo Marçal`, `Guilherme Boulos`, `Fernando Haddad`, entre outros.
+
+Também foram adicionados exemplos curados e rastreáveis para evitar confusões em frases curtas, como diferenciar `Lula foi preso` de `Lula está preso atualmente`.
 
 
 ## Algoritmo utilizado
@@ -97,13 +100,13 @@ As métricas abaixo foram calculadas no conjunto de teste, usando exemplos únic
 
 | Métrica | Resultado |
 | --- | ---: |
-| Accuracy geral | 86,50% |
-| Precision `Fake` | 93,33% |
-| Recall `Fake` | 90,09% |
-| F1-score `Fake` | 91,68% |
-| Precision `True` | 59,66% |
-| Recall `True` | 69,48% |
-| F1-score `True` | 64,19% |
+| Accuracy geral | 86,53% |
+| Precision `Fake` | 91,67% |
+| Recall `Fake` | 91,98% |
+| F1-score `Fake` | 91,83% |
+| Precision `True` | 62,15% |
+| Recall `True` | 61,18% |
+| F1-score `True` | 61,66% |
 
 Matriz de confusão:
 
@@ -111,13 +114,13 @@ Matriz de confusão:
 Linhas: classes reais ["Fake", "True"]
 Colunas: classes previstas ["Fake", "True"]
 
-[[1064, 117],
- [  76, 173]]
+[[1090, 95],
+ [  99, 156]]
 ```
 
 ## Sobre o filtro de 95%
 
-A acurácia geral do modelo foi de `86,50%`. Porém, o sistema não aceita qualquer resposta automaticamente.
+A acurácia geral do modelo foi de `86,53%`. Porém, o sistema não aceita qualquer resposta automaticamente.
 
 Para exibir uma classificação final, o classificador usa:
 
@@ -130,9 +133,9 @@ Com esse filtro, os resultados aceitos no teste tiveram:
 
 | Indicador | Resultado |
 | --- | ---: |
-| Previsões aceitas | 291 |
-| Cobertura do conjunto de teste | 20,35% |
-| Accuracy nas previsões aceitas | 99,31% |
+| Previsões aceitas | 277 |
+| Cobertura do conjunto de teste | 19,24% |
+| Accuracy nas previsões aceitas | 98,92% |
 
 Isso significa que o modelo é mais conservador: ele prefere retornar `Inconclusiva` quando não encontra segurança suficiente para responder.
 
@@ -154,6 +157,12 @@ Adicionar exemplos verdadeiros de fontes confiáveis:
 
 ```bash
 py collect_official_true_data.py
+```
+
+Adicionar exemplos curados rastreáveis:
+
+```bash
+py add_curated_examples.py
 ```
 
 Balancear o dataset para 50.000 linhas:
